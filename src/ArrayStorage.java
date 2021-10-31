@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Array based storage for Resumes
@@ -9,7 +10,7 @@ public class ArrayStorage {
 
     void clear() {
         for (int index = 0; index < size; index++) {
-                storage[index] = null;
+            storage[index] = null;
         }
         size = 0;
     }
@@ -20,7 +21,6 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-
         for (int index = 0; index < size; index++) {
             if (storage[index].toString().equals(uuid))
                 return storage[index];
@@ -29,15 +29,19 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-
+        boolean moveArray = false;
         for (int index = 0; index < size; index++) {
-            if (storage[index] == null || storage[index].toString().equals(uuid)) {
+            if (storage[index].toString().equals(uuid)){
                 storage[index] = storage[index + 1];
-                storage[index + 1] = null;
+                moveArray = true;
+            }
+            if (moveArray)  {
+                storage[index] = storage[index + 1];
             }
         }
-            size--;
-        }
+        storage[size - 1] = null;
+        size--;
+    }
 
     Resume[] getAll() {
         return Arrays.copyOf(storage, size);
