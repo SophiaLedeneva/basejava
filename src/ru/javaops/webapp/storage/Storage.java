@@ -2,6 +2,8 @@ package ru.javaops.webapp.storage;
 
 import ru.javaops.webapp.model.Resume;
 
+import java.util.List;
+
 /**
  * Array based storage for Resumes
  */
@@ -17,8 +19,9 @@ public interface Storage {
 
      void delete(String uuid);
 
-     Resume[] getAll();
-    //List<Resume> getAllSorted();
+     List<Resume> getAllSorted();
+
+
      int size();
 
 }
