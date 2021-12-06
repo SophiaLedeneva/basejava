@@ -2,58 +2,26 @@ package ru.javaops.webapp.storage;
 
 import ru.javaops.webapp.model.Resume;
 
-import java.util.Arrays;
-
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void clear() {
-        Arrays.fill(storage,0, size, null);
-        size = 0;
+    @Override
+    protected void fillDeletedElement(int index) {
+        storage[index] = storage[size - 1];
     }
 
-    public void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index > -1) {
-            storage[index] = resume;
-        } else {
-            System.out.println("Resume " + resume.getUuid() + " not found");
-        }
+    @Override
+    protected void insertElement(Resume r, int index) {
+        storage[size] = r;
     }
 
-    public void save(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if ((index == -1) && (size <= 9999)) {
-           storage[size] = resume;
-           size++;
-       } else if (index == -1){
-            System.out.println("Resume " + resume.getUuid() + " exist");
-        } else {
-            System.out.println("Storage overflow");
-        }
-    }
-
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index > -1) {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-            size--;
-        } else {
-            System.out.println("Resume " + uuid + " not found");
-        }
-    }
-
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
-    }
-
-    protected int findIndex(String resume) {
-        for (int index = 0; index < size; index++) {
-            if (storage[index].toString().equals(resume)) {
-                return index;
+    @Override
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (uuid.equals(storage[i].getUuid())) {
+                return i;
             }
         }
         return -1;
